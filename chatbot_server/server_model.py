@@ -101,10 +101,9 @@ def clean_data(x):
 
 
 def create_soup(x):
-    return ' '.join(x['keywords']) + ' ' + ' '.join(x['cast']) + ' ' + x['director'] + ' ' + ' '.join(x['genres'])
+    return ' '.join(x['keywords']) + ' ' + ' '.join(x['cast']) + ' ' + x['director'] + ' ' + ' '.join(x['genres']) + ' ' + ' '.join(x['spoken_languages'])
 
 # metadata['soup'] = metadata.apply(create_soup, axis=1)
-
 
 def get_genres():
   genres = input("What Movie Genre are you interested in (if multiple, please separate them with a comma)? [Type 'skip' to skip this question] ")
@@ -126,7 +125,12 @@ def get_keywords():
   keywords = " ".join(["".join(n.split()) for n in keywords.lower().split(',')])
   return keywords
 
-def get_searchTerms(genres, actors, directors, keywords):
+def get_language():
+  language = input("Which language do you prefer? [Type 'skip' to skip this question] ")
+  language = " ".join(["".join(n.split()) for n in keywords.lower().split(',')])
+  return language
+
+def get_searchTerms(genres, actors, directors, keywords,spoken_languages):
   searchTerms = [] 
 #   genres = get_genres()
   if genres != 'skip':
@@ -143,14 +147,17 @@ def get_searchTerms(genres, actors, directors, keywords):
 #   keywords = get_keywords()
   if keywords != 'skip':
     searchTerms.append(keywords)
+
+  if spoken_languages != 'skip':
+    searchTerms.append(spoken_languages)
   
   return searchTerms
 
 # def prepare_metadata():
-#     metadata = pd.read_csv("C:\\Users\\szell\\uva\\2021Spring\\IR\S21-Information-Retrieval-Project\\chatbot_server\\Recommender Data\\movies_metadata.csv")
-#     ratings = pd.read_csv("C:\\Users\\szell\\uva\\2021Spring\\IR\S21-Information-Retrieval-Project\\chatbot_server\\Recommender Data\\ratings.csv")
-#     credits = pd.read_csv("C:\\Users\\szell\\uva\\2021Spring\\IR\S21-Information-Retrieval-Project\\chatbot_server\\Recommender Data\\credits.csv")
-#     keywords = pd.read_csv("C:\\Users\\szell\\uva\\2021Spring\\IR\S21-Information-Retrieval-Project\\chatbot_server\\Recommender Data\\keywords.csv")
+#     metadata = pd.read_csv(" /Users/dulinyang/Desktop/keywords.csv/movies_metadata.csv")
+#     ratings = pd.read_csv(" /Users/dulinyang/Desktop/keywords.csv/ratings.csv")
+#     credits = pd.read_csv("/Users/dulinyang/Desktop/credits.csv")
+#     keywords = pd.read_csv("/Users/dulinyang/Desktop/keywords.csv")
 
 #     metadata = metadata.iloc[0:1000,:]
 
@@ -161,17 +168,17 @@ def get_searchTerms(genres, actors, directors, keywords):
 #     metadata = metadata.merge(credits, on='id')
 #     metadata = metadata.merge(keywords, on='id')
 
-#     features = ['cast', 'crew', 'keywords', 'genres']
+#     features = ['cast', 'crew', 'keywords', 'genres','spoken_languages']
 #     for feature in features:
 #         metadata[feature] = metadata[feature].apply(literal_eval)
 
 #     metadata['director'] = metadata['crew'].apply(get_director)
 
-#     features = ['cast', 'keywords', 'genres']
+#     features = ['cast', 'keywords', 'genres','spoken_languages']
 #     for feature in features:
 #         metadata[feature] = metadata[feature].apply(get_list)
 
-#     features = ['cast', 'keywords', 'director', 'genres']
+#     features = ['cast', 'keywords', 'director', 'genres','spoken_languages']
 
 #     for feature in features:
 #         metadata[feature] = metadata[feature].apply(clean_data)
@@ -181,12 +188,12 @@ def get_searchTerms(genres, actors, directors, keywords):
 #     return metadata
 
 
-def make_recommendation(metadata, genres, actors, directors, keywords):
+def make_recommendation(metadata, genres, actors, directors, keywords, spoken_languages):
   new_row = metadata.iloc[-1,:].copy() #creating a copy of the last row of the 
   #dataset, which we will use to input the user's input
   
   #grabbing the new wordsoup from the user
-  searchTerms = get_searchTerms(genres, actors, directors, keywords)  
+  searchTerms = get_searchTerms(genres, actors, directors, keywords,spoken_languages)  
   new_row.iloc[-1] = " ".join(searchTerms) #adding the input to our new row
   
   #adding the new row to the dataset
@@ -283,8 +290,8 @@ def create_user_profile(minidata, userID):
     CF_userbased.compute_similarities(df=minidata, user=userID)
     return CF_userbased
 
-def make_recommendation_logged(metadata, minidata, CF_userbased, userID, genres, actors, directors, keywords): #minidata --> data with rating
-    ranked_titles  = make_recommendation(metadata, genres, actors, directors, keywords)
+def make_recommendation_logged(metadata, minidata, CF_userbased, userID, genres, actors, directors, keywords, spoken_languages): #minidata --> data with rating
+    ranked_titles  = make_recommendation(metadata, genres, actors, directors, keywords,spoken_languages)
 
     popular_mov_list = []
     minidata["movie_id"] = pd.to_numeric(minidata["movie_id"]) 
@@ -311,7 +318,7 @@ def test():
     minidata = pd.read_pickle("minidata.pkl")
     userID = 20
     CF_userbased = create_user_profile(minidata, userID)
-    print (make_recommendation_logged(metadata, minidata, CF_userbased=CF_userbased, userID=userID, genres="Romance", actors="emma", directors="skip", keywords="friendship"))
+    print (make_recommendation_logged(metadata, minidata, CF_userbased=CF_userbased, userID=userID, genres="Romance", actors="emma", directors="skip", keywords="friendship",spoken_languages="english"))
 
 
 
