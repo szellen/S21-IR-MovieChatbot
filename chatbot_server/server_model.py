@@ -207,10 +207,9 @@ def make_recommendation(metadata,jsdata):
 
   #matching the similarities to the movie titles and ids
   ranked_titles = []
-  for i in range(1, 51):
+  for i in range(1, 21):
     indx = sim_scores[i][0]
-    ranked_titles.append([metadata['title'].iloc[indx], metadata['imdb_id'].iloc[indx], metadata['id'].iloc[indx]])
-  
+    ranked_titles.append([metadata['title'].iloc[indx], metadata['imdb_id'].iloc[indx], metadata['id'].iloc[indx],metadata['genres'].iloc[indx], "Most Relevant", "NaN"])
   return ranked_titles
 
 
@@ -256,10 +255,10 @@ def make_recommendation(metadata,jsdata):
 #     minidata.to_pickle("minidata.pkl")
 
 
-def assign_to_testset(df):
-    sampled_ids = np.random.choice(df.index,size=np.int64(np.ceil(df.index.size * 0.2)),replace=False)
-    df.loc[sampled_ids, 'for_testing'] = True
-    return df
+# def assign_to_testset(df):
+#     sampled_ids = np.random.choice(df.index,size=np.int64(np.ceil(df.index.size * 0.2)),replace=False)
+#     df.loc[sampled_ids, 'for_testing'] = True
+#     return df
 
 
 def SimPearson(df,user1,user2,items_min=1):
@@ -286,8 +285,8 @@ def create_user_profile(minidata, userID):
     return CF_userbased
 
 def make_recommendation_logged(metadata, minidata, CF_userbased, userID, jsdata): #minidata --> data with rating
-    ranked_titles  = make_recommendation(metadata, jsdata)
-
+    ranked_titles = make_recommendation(metadata, jsdata)
+    ranked_titles = [mov[0:4] for mov in ranked_titles] #remove last column
     popular_mov_list = []
     minidata["movie_id"] = pd.to_numeric(minidata["movie_id"]) 
     for mov in ranked_titles:
@@ -297,23 +296,35 @@ def make_recommendation_logged(metadata, minidata, CF_userbased, userID, jsdata)
         if (query_result.size > 0): #movie with enough rating
             popular_mov_list.append(mov)
 
-    # CF_userbased=CF(df=minidata,simfunc=SimPearson)
-    # dicsim=CF_userbased.compute_similarities(df=minidata, user=userID)
-
     for i in range (0, len(popular_mov_list)):
         mov = popular_mov_list[i]
         example_pred=CF_userbased.predict(user=userID,movie=mov[2])
-        popular_mov_list[i] = popular_mov_list[i] + [example_pred] #append predicted score
-    popular_mov_list = sorted(popular_mov_list, key=lambda x: x[3], reverse=True)
-    sorted_popular_mov_list = [movie[0:4] for movie in popular_mov_list]
-    return sorted_popular_mov_list
+        example_pred = round(example_pred,3)
+        popular_mov_list[i] = popular_mov_list[i] + ["Highest Predicted Score"] + [example_pred]  #append predicted score
+    sorted_popular_mov_list = sorted(popular_mov_list, key=lambda x: x[5], reverse=True) #ranked by predicted score
 
+    #combine with relevent result 
+    complete_recommend_list = sorted_popular_mov_list
+    index = 0
+    col_list_title = [mov[2] for mov in sorted_popular_mov_list]
+
+    while (len(complete_recommend_list) < 8):
+        #if not already return 
+        if (ranked_titles[index][2] not in col_list_title):
+            relevant_mov = ranked_titles[index] + ["Most Relevant"] + ["NaN"]
+            complete_recommend_list.append(relevant_mov)
+        index+=1
+
+    return complete_recommend_list[0:8]
+    # return sorted_popular_mov_list
+
+#for testing purpose    
 def test():
     metadata = pd.read_pickle("metadata.pkl")
     minidata = pd.read_pickle("minidata.pkl")
     userID = 20
     CF_userbased = create_user_profile(minidata, userID)
-    print (make_recommendation_logged(metadata, minidata, CF_userbased=CF_userbased, userID=userID, genres="Romance", actors="emma", directors="skip", keywords="friendship"))
+    print (make_recommendation_logged(metadata, minidata, CF_userbased=CF_userbased, userID=userID, jsdata="Romance"))
 
 
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
+    <title>Movie Recommender</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   </head>
   <body>
@@ -16,15 +16,17 @@
         Recommend a movie
       </p>
 
-    <form action = "http://localhost:5000/query" method = "POST">
-        <div class="field">
-            <div class="control is-loading">
-              <input class="input is-medium" type="text" placeholder="Leave empty to continue as guest" name="UserID">
+
+      <form action = "http://localhost:5000/query" method = "POST">
+          <div class="field">
+              <div class="control is-loading">
+                <input class="input is-medium" type="text" placeholder="Use 0 to continue as guest" name="UserID" style="width:80%">
+                <button class="button is-link is-rounded">Go</button>
+              </div>
             </div>
-          </div>
-        <button class="button is-link is-rounded">Go</button>
-    </form>
+      </form>
     </div>
+
   </section>
   </body>
 </html>

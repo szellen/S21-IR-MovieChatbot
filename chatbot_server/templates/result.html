@@ -1,14 +1,65 @@
-<!doctype html>
-  <table border = 1>
-    Hi user {{userID}}
-    {% for key in result %}
+<!-- <!doctype html>
+Hi user {{userID}}.-->
 
-    <div class='movie-box'>
-        <a href='https://www.imdb.com/title/{{key[1]}}'>
-        <img src='http://img.omdbapi.com/?apikey=ea75cc5f&i={{key[1]}}'/>
-        <p class='movie-title'>{{key[0]}}</p>
-        <p class='movie-details'></p>    
-        </a>
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cards List - Bulma Templates</title>
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+    <script src="https://kit.fontawesome.com/7dc3015a44.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link rel="stylesheet" href="../css/cards.css">
+  </head>
+
+  <body>
+     <div class="container">
+      <div class="section">
+        <div class="columns" style=" margin: 5%;">
+          <div class="column has-text-centered">
+            <h1 class="title" style="color: rgb(11, 11, 19);">Hi User {{userID}} ;-) Movie you might enjoy</h1><br>
+            <button id="newSearch" class="button is-link">New Search</button>
+            <button id="logout" class="button is-info">Log out</button>
+          </div>
+        </div>
+        <div  class="row columns is-multiline">
+          {% for key in result %}
+          <a href='https://www.imdb.com/title/{{key[1]}}' key="card.id" class="column is-3">
+            <div class="card large" style="height: 100%">
+              <div class="card-image">
+                <figure class="image is-64x64 is-inline-block"></figure>
+                  <img src='http://img.omdbapi.com/?apikey=ea75cc5f&i={{key[1]}}' alt="image not available" />
+                </figure>
+                <div class="media-content has-text-centered">
+                  <p class="title is-4 no-padding">{{key[0]}}</p>
+                    <p class="subtitle is-6"> Reason: {{key[4]}}</p>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="content has-text-centered">
+                  <p>Genres: {{key[3]}}</p>
+                  <p>Predicted Score: {{key[5]}}</p>
+                </div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
     </div>
-    {% endfor %}
- </table>
+  </body>
+</html>  
+
+<script type="text/javascript">
+  document.getElementById("newSearch").onclick = function () {
+      location.href = "/query";
+  };
+
+  document.getElementById("logout").onclick = function () {
+      location.href = "/login";
+  };
+</script>
