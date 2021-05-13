@@ -1,0 +1,14 @@
+<!doctype html>
+  <table border = 1>
+    Hi user {{userID}}
+    {% for key in result %}
+
+    <div class='movie-box'>
+        <a href='https://www.imdb.com/title/{{key[1]}}'>
+        <img src='http://img.omdbapi.com/?apikey=ea75cc5f&i={{key[1]}}'/>
+        <p class='movie-title'>{{key[0]}}</p>
+        <p class='movie-details'></p>    
+        </a>
+    </div>
+    {% endfor %}
+ </table>
