@@ -7,6 +7,23 @@ app = Flask(__name__)
 userID = 0
 minidata = pd.DataFrame
 CF_userbased = CF
+metadata = pd.read_pickle("metadata.pkl")
+
+@app.route('/test')
+def interaction():
+    return render_template('interaction.html')
+# @app.route('/test/<jsdata>')
+# def get_javascript_data(jsdata):
+#     return jsdata
+
+@app.route('/test2/<jsdata>')
+def get_javascript_data(jsdata):
+    if userID == 0:
+        ret = make_recommendation(metadata, jsdata)
+    else:
+        ret = make_recommendation_logged(metadata, minidata, CF_userbased, int(userID), jsdata)
+    return render_template("result.html",result = ret, userID = userID)
+    # return jsdata
 
 @app.route('/login')
 def userLogin():
@@ -23,7 +40,9 @@ def prepareData():
         global CF_userbased
         CF_userbased = create_user_profile(minidata,int(userID))
 
-    return render_template('question.html', userID = userID)
+    # return render_template('question.html', userID = userID)
+    return render_template('interaction.html')
+
 
 @app.route('/result',methods = ['POST', 'GET'])
 def result():

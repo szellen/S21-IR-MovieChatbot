@@ -181,12 +181,14 @@ def get_searchTerms(genres, actors, directors, keywords):
 #     return metadata
 
 
-def make_recommendation(metadata, genres, actors, directors, keywords):
+def make_recommendation(metadata,jsdata):
   new_row = metadata.iloc[-1,:].copy() #creating a copy of the last row of the 
   #dataset, which we will use to input the user's input
   
   #grabbing the new wordsoup from the user
-  searchTerms = get_searchTerms(genres, actors, directors, keywords)  
+#   searchTerms = get_searchTerms(genres, actors, directors, keywords)  
+  jsdata = list(jsdata.split(" "))
+  searchTerms = jsdata
   new_row.iloc[-1] = " ".join(searchTerms) #adding the input to our new row
   
   #adding the new row to the dataset
@@ -283,8 +285,8 @@ def create_user_profile(minidata, userID):
     CF_userbased.compute_similarities(df=minidata, user=userID)
     return CF_userbased
 
-def make_recommendation_logged(metadata, minidata, CF_userbased, userID, genres, actors, directors, keywords): #minidata --> data with rating
-    ranked_titles  = make_recommendation(metadata, genres, actors, directors, keywords)
+def make_recommendation_logged(metadata, minidata, CF_userbased, userID, jsdata): #minidata --> data with rating
+    ranked_titles  = make_recommendation(metadata, jsdata)
 
     popular_mov_list = []
     minidata["movie_id"] = pd.to_numeric(minidata["movie_id"]) 
