@@ -126,25 +126,25 @@ def get_keywords():
   keywords = " ".join(["".join(n.split()) for n in keywords.lower().split(',')])
   return keywords
 
-def get_searchTerms(genres, actors, directors, keywords):
-  searchTerms = [] 
-#   genres = get_genres()
-  if genres != 'skip':
-    searchTerms.append(genres)
+# def get_searchTerms(genres, actors, directors, keywords):
+#   searchTerms = [] 
+# #   genres = get_genres()
+#   if genres != 'skip':
+#     searchTerms.append(genres)
 
-#   actors = get_actors()
-  if actors != 'skip':
-    searchTerms.append(actors)
+# #   actors = get_actors()
+#   if actors != 'skip':
+#     searchTerms.append(actors)
 
-#   directors = get_directors()
-  if directors != 'skip':
-    searchTerms.append(directors)
+# #   directors = get_directors()
+#   if directors != 'skip':
+#     searchTerms.append(directors)
 
-#   keywords = get_keywords()
-  if keywords != 'skip':
-    searchTerms.append(keywords)
+# #   keywords = get_keywords()
+#   if keywords != 'skip':
+#     searchTerms.append(keywords)
   
-  return searchTerms
+#   return searchTerms
 
 # def prepare_metadata():
 #     metadata = pd.read_csv("C:\\Users\\szell\\uva\\2021Spring\\IR\S21-Information-Retrieval-Project\\chatbot_server\\Recommender Data\\movies_metadata.csv")

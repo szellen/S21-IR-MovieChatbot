@@ -357,11 +357,23 @@
           query += rawText.toLowerCase().split(' ').join('').split(',').join(' ');
         }
         setTimeout(function(){
-          $('#chatbox').children().last().html('Got it! And who are some actors within that genre that you love?<br><i style="font-size: 16px; color: rgb(17, 39, 100)">(if multiple, please separate them with a comma)</i>');
+          $('#chatbox').children().last().html('Amazing! Next, what are some of the keywords that describe the movie you want to watch <br>');
         }, 500);
       
       // Second Question, Append to Query
-      } else {
+      } else if (question == 2)  {
+        question ++;
+        var botHtml = "<div class='speech-bubble-bot botText'><div class='loading-bubble'></div><div class='loading-bubble'></div><div class='loading-bubble'></div></div>";
+        $("#chatbox").append(botHtml);
+        if (rawText != 'skip') {
+          query += ' ' + rawText.toLowerCase().split(' ').join('').split(',').join(' ');
+        }
+        setTimeout(function(){
+          $('#chatbox').children().last().html('Got it! And who are some actors or directors within that genre that you love?<br>');
+        }, 500);
+      }
+
+      else {
         question = 0;
         var botHtml = "<div class='speech-bubble-bot botText'><div class='loading-bubble'></div><div class='loading-bubble'></div><div class='loading-bubble'></div></div>";
         $("#chatbox").append(botHtml);
@@ -369,7 +381,7 @@
           query += ' ' + rawText.toLowerCase().split(' ').join('').split(',').join(' ');
         }
         setTimeout(function(){
-          $('#chatbox').children().last().html('Amazing! Last question: who are some directors within that genre that you love?<br><i style="font-size: 16px; color: rgb(17, 39, 100)">(if multiple, please separate them with a comma)</i>');
+          $('#chatbox').children().last().html('Last question: What language do you want?<br>');
         }, 500);
       }
     }
