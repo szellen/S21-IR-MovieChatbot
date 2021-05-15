@@ -357,7 +357,7 @@
           query += rawText.toLowerCase().split(' ').join('').split(',').join(' ');
         }
         setTimeout(function(){
-          $('#chatbox').children().last().html('Amazing! Next, what are some of the keywords that describe the movie you want to watch <br>');
+          $('#chatbox').children().last().html('Amazing! Next, what are some actors you want to watch <br>');
         }, 500);
       
       // Second Question, Append to Query
@@ -369,7 +369,7 @@
           query += ' ' + rawText.toLowerCase().split(' ').join('').split(',').join(' ');
         }
         setTimeout(function(){
-          $('#chatbox').children().last().html('Got it! And who are some actors or directors within that genre that you love?<br>');
+          $('#chatbox').children().last().html('Got it! And who are some directors within that genre that you love?<br>');
         }, 500);
       }
 
